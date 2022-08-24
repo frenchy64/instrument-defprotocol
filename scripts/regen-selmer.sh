@@ -3,4 +3,4 @@
 set -e
 
 cd dev
-bb -m io.github.frenchy64.instrument-defprotocol.dev.selmer
+bb -m com.ambrosebs.instrument-defprotocol.dev.selmer

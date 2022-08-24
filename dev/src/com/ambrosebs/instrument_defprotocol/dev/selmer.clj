@@ -1,4 +1,4 @@
-(ns io.github.frenchy64.instrument-defprotocol.dev.selmer
+(ns com.ambrosebs.instrument-defprotocol.dev.selmer
   (:require [selmer.parser :as sp :refer [render render-file]]
             [selmer.util :as su]
             [clojure.string :as str]
@@ -38,6 +38,7 @@
 (defn -main []
   (let [opts {:current-version (str/trim (slurp (io/resource "latest-version-tag")))
               :project-name "instrument-defprotocol"
+              :project-url "https://github.com/frenchy64/instrument-defprotocol"
               :short-sha (str/trim (slurp (io/resource "latest-version-short-sha")))}]
     (doseq [[src dest] release-transforms]
       (spit (str "../" dest)

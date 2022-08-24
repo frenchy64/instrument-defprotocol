@@ -5,39 +5,39 @@ Utilities to wrap defprotocol.
 
 ## Dependency Information
 
-Available on [Clojars](https://clojars.org/io.github.frenchy64/instrument-defprotocol).
+Available on [Clojars](https://clojars.org/com.ambrosebs/instrument-defprotocol).
 
 Leiningen:
 
 ```clojure
-[io.github.frenchy64/instrument-defprotocol "0.0.0"]
+[com.ambrosebs/instrument-defprotocol "1.0.0-SNAPSHOT"]
 ```
 
 Clojure CLI (Maven deps):
 
 ```clojure
-  :deps {io.github.frenchy64/instrument-defprotocol
-         {:mvn/version "0.0.0"}}
+  :deps {com.ambrosebs/instrument-defprotocol
+         {:mvn/version "1.0.0-SNAPSHOT"}}
 ```
 
 Clojure CLI (git deps):
 
 ```clojure
   ;; requires `clj -X:deps prep` to compile java
-  :deps {io.github.frenchy64/instrument-defprotocol
-         {:git/tag "0.0.0", :git/sha "0000000"}}
+  :deps {com.ambrosebs/instrument-defprotocol
+         {:git/url "https://github.com/frenchy64/instrument-defprotocol" :git/tag "1.0.0-SNAPSHOT", :git/sha "4862b97"}}
 ```
 
 Try it in a REPL:
 
 ```clojure
-clj -Sdeps '{:deps {io.github.frenchy64/instrument-defprotocol {:git/tag "0.0.0", :git/sha "0000000"}}}'
+clj -Sdeps '{:deps {com.ambrosebs/instrument-defprotocol {:git/url "https://github.com/frenchy64/instrument-defprotocol", :git/tag "1.0.0-SNAPSHOT", :git/sha "4862b97"}}}'
 ```
 
 ## License
 
 ```
-Copyright © 2021 Ambrose Bonnaire-Sergeant
+Copyright © 2022 Ambrose Bonnaire-Sergeant
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at

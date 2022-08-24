@@ -1,7 +1,17 @@
-(ns io.github.frenchy64.instrument-defprotocol.clj
+(ns com.ambrosebs.instrument-defprotocol.clj
   "Instrumentation of clojure.core/defprotocol (Clojure implementation).
   Instrumentation is not threadsafe (do not install methods or otherwise modify
-  the protocol during instrumentation), but usage is as threadsafe as protocols.")
+  the protocol during instrumentation), but usage is as threadsafe as protocols.
+  
+  Compatible with Clojure 1.8 through 1.11.")
+
+(let [^java.util.Map instrumentation-state (java.util.Collections/synchronizedMap (java.util.WeakHashMap.))]
+  (defn- get-instrumentation-state [method-var]
+    (locking instrumentation-state
+      (or (.get instrumentation-state method-var)
+          (let [atm (atom {})]
+            (.put instrumentation-state method-var atm)
+            atm)))))
 
 (defn sync!
   "Propagate method cache from outer-mth (the wrapper) to inner-mth
@@ -20,7 +30,8 @@
 
 (defn get-method-builder
   [pvar method-var]
-  (alter-var-root pvar get-in [:method-builders method-var]))
+  {:post [(ifn? %)]}
+  (get-in @pvar [:method-builders method-var]))
 
 (defn install-method-builder!
   [pvar method-var method-builder]
@@ -66,13 +77,15 @@
   "Given a protocol Var pvar, its method method-var and instrument-method,
   instrument the protocol method. Returns a map of unstrument-info that can be
   passed to `unstrument-protocol-method` to undo instrumentation."
-  [pvar ;:- Var
+  [id ;QualifiedKeyword
+   pvar ;:- Var
    method-var ;:- (Var InnerMth)
    instrument-method #_:- #_(s/=>* OuterMth
                                    [InnerMth
                                     (named (=> Any OuterMth InnerMth)
                                            'sync!)])]
-  (let [{:keys [outer-mth method-builder] :as unstrument-info} (create-method-builder method-var instrument-method)]
+  (let [atm (get-instrumentation-state )
+        {:keys [outer-mth method-builder] :as unstrument-info} (create-method-builder method-var instrument-method)]
     ;; instrument method builder
     (install-method-builder! pvar method-var method-builder)
     (disable-protocol-method-inlining! method-var)
@@ -83,7 +96,8 @@
 (defn unstrument-protocol-method
   "Revert the effects of instrument-protocol-method. Pass the result of instrument-protocol-method
   as `unstrument-info`."
-  [pvar
+  [id
+   pvar
    method-var
    {:keys [inner-mth original-method-builder]
     :as unstrument-info}]
